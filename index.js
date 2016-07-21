@@ -1,5 +1,15 @@
 var users = [];
 
+function navigate(state){
+    var pages = document.getElementsByClassName("page");
+    for(var i = 0; i < pages.length; i++){
+        pages[i].id === state ? pages[i].className = "page container" : pages[i].className = " page container hiddenPage";
+    }
+    
+    console.log(state);
+}
+
+navigate("test");
 function create() {
     var newUser = {};
     newUser["Full Name"] = document.getElementById('fullName').value;
@@ -12,11 +22,12 @@ function create() {
     var table = document.getElementById("usersTable");
 
     if(table){
-        var tablePage = document.getElementById("list");
+        var tablePage = document.getElementById("listContainer");
         tablePage.removeChild(table);
     }
 
     list(users);
+    navigate('list');
 }
 
 function list(users) {
@@ -71,16 +82,18 @@ function list(users) {
 
         buttonGroup.appendChild(editButton);
         buttonGroup.appendChild(deleteButton);
+        controlsCell.className += "controlsCell";
         controlsCell.appendChild(buttonGroup);
         row.appendChild(controlsCell);
         tbody.appendChild(row);
     });
     table.appendChild(tbody);
-    var tablePage = document.getElementById("list");
+    var tablePage = document.getElementById("listContainer");
     table.id = "usersTable";
-    table.className += "table";
+    table.className += "table table-stripped table-hover";
 
     tablePage.appendChild(table);
 }
 
+navigate("list");
 list(users);

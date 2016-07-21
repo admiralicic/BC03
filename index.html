@@ -14,14 +14,14 @@
             <a class="navbar-brand" href="#">Admin Page</a>
             </div>
             <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Users</a></li>
-            <li><a href="#">Add User</a></li>
+            <li class="active"><a href="#" onclick="navigate('list')">Users</a></li>
+            <li><a href="#" onclick="navigate('create')">Add User</a></li>
             </ul>
         </div>
     </nav>
 
-    <div class="page container">
-        <div id="list" class="col-md-12">
+    <div class="page container" id="list">
+        <div id="listContainer" class="col-md-12">
             <h2>Users</h2>
         </div>
     </div>
@@ -46,7 +46,7 @@
                 <input type="password" class="form-control" name="password" id="password">
             </div>
             <button class="btn btn-success" onclick="create()">Create</button>
-            <button class="btn btn-default">Cancel</button>
+            <button class="btn btn-default" onclick="navigate('list')">Cancel</button>
         </div>
     </div>
     <script src="index.js"></script>

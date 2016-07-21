@@ -34,6 +34,8 @@ function list(users) {
         headerCell.textContent = field;
         header.appendChild(headerCell);
     });
+    var headerCell = document.createElement("th");
+    header.appendChild(headerCell);
     thead.appendChild(header)
     table.appendChild(thead);
 
@@ -54,11 +56,29 @@ function list(users) {
             }
             row.appendChild(cell);
         });
+        var controlsCell = document.createElement("td");
+
+        var buttonGroup = document.createElement("div");
+        buttonGroup.className = "btn-group";
+
+        var editButton = document.createElement("button");
+        editButton.className = "btn btn-default btn-xs";
+        editButton.textContent = "Edit";
+
+        var deleteButton =document.createElement("button");
+        deleteButton.className = "btn btn-danger btn-xs";
+        deleteButton.textContent = "Delete";
+
+        buttonGroup.appendChild(editButton);
+        buttonGroup.appendChild(deleteButton);
+        controlsCell.appendChild(buttonGroup);
+        row.appendChild(controlsCell);
         tbody.appendChild(row);
     });
     table.appendChild(tbody);
     var tablePage = document.getElementById("list");
     table.id = "usersTable";
+    table.className += "table";
 
     tablePage.appendChild(table);
 }

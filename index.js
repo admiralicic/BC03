@@ -1,15 +1,45 @@
-var users = [];
+var users = [
+    {"Full Name" : "Admir Alicic", Username: "admiralicic", "E-mail": "admir.alicic@gmail.com", Password: "test"},
+    {"Full Name" : "Emir Alicic", Username: "emiralicic", "E-mail": "emir.alicic@gmail.com", Password: "test"},
+    {"Full Name" : "Haris Alicic", Username: "harisalicic", "E-mail": "haris.alicic@gmail.com", Password: "test"},
+];
 
 function navigate(state){
     var pages = document.getElementsByClassName("page");
     for(var i = 0; i < pages.length; i++){
         pages[i].id === state ? pages[i].className = "page container" : pages[i].className = " page container hiddenPage";
     }
-    
-    console.log(state);
+   
 }
 
-navigate("test");
+function deleteUser(event){
+    if(confirm("Are you sure you want to delete a user")){
+        var btn = event.target;
+        var row = btn.parentElement.parentElement.parentElement;
+        
+        for(var i = 0; i < users.length; i++){
+            if(users[i]["E-mail"] === rowData(row).email){
+                users.splice(i,1);
+
+                var tbody = document.getElementsByTagName("tbody")[0];
+                tbody.removeChild(row);
+
+                break;
+            }
+        }
+
+    }
+}
+
+function rowData(row){
+    return {
+        fullName:   row.childNodes[0].textContent,
+        username:   row.childNodes[1].textContent,
+        email:      row.childNodes[2].textContent,
+        password:   row.childNodes[3].textContent,
+    }
+}
+
 function create() {
     var newUser = {};
     newUser["Full Name"] = document.getElementById('fullName').value;
@@ -79,6 +109,7 @@ function list(users) {
         var deleteButton =document.createElement("button");
         deleteButton.className = "btn btn-danger btn-xs";
         deleteButton.textContent = "Delete";
+        deleteButton.onclick = deleteUser;
 
         buttonGroup.appendChild(editButton);
         buttonGroup.appendChild(deleteButton);

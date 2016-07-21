@@ -1,7 +1,7 @@
 var users = [
-    {"Full Name" : "Admir Alicic", Username: "admiralicic", "E-mail": "admir.alicic@gmail.com", Password: "test"},
-    {"Full Name" : "Emir Alicic", Username: "emiralicic", "E-mail": "emir.alicic@gmail.com", Password: "test"},
-    {"Full Name" : "Haris Alicic", Username: "harisalicic", "E-mail": "haris.alicic@gmail.com", Password: "test"},
+    {ID: 1, "Full Name" : "Admir Alicic", Username: "admiralicic", "E-mail": "admir.alicic@gmail.com", Password: "test"},
+    {ID: 2, "Full Name" : "Emir Alicic", Username: "emiralicic", "E-mail": "emir.alicic@gmail.com", Password: "test"},
+    {ID: 3, "Full Name" : "Haris Alicic", Username: "harisalicic", "E-mail": "haris.alicic@gmail.com", Password: "test"},
 ];
 
 function navigate(state){
@@ -10,6 +10,42 @@ function navigate(state){
         pages[i].id === state ? pages[i].className = "page container" : pages[i].className = " page container hiddenPage";
     }
    
+}
+
+function editUser(event){
+    var btn = event.target;
+    var row = btn.parentElement.parentElement.parentElement;
+    var user = rowData(row);
+
+    navigate('edit');
+
+    var fullNameField = document.getElementById("editFullName");
+    var usernameField = document.getElementById("editUsername");
+    var emailField = document.getElementById("editEmail");
+    var passwordField = document.getElementById("editPassword");
+    var idField = document.getElementById("userId");
+
+    fullNameField.value = user.fullName;
+    usernameField.value = user.username;
+    emailField.value = user.email;
+    passwordField.value = user.password;
+    idField.value = user.id;
+}
+
+function updateUser(){
+    for(var i = 0; i < users.length; i++){
+       if(users[i].ID === parseInt(document.getElementById("userId").value)){
+           users[i]["Full Name"] = document.getElementById("editFullName").value;
+           users[i]["Username"] = document.getElementById("editUsername").value;
+           users[i]["E-mail"] = document.getElementById("editEmail").value;
+           users[i]["Password"] = document.getElementById("editPassword").value;
+
+           rebuildTable();
+           break;
+       }
+    }
+
+    navigate("list");
 }
 
 function deleteUser(event){
@@ -33,10 +69,11 @@ function deleteUser(event){
 
 function rowData(row){
     return {
-        fullName:   row.childNodes[0].textContent,
-        username:   row.childNodes[1].textContent,
-        email:      row.childNodes[2].textContent,
-        password:   row.childNodes[3].textContent,
+        id:         row.childNodes[0].textContent,
+        fullName:   row.childNodes[1].textContent,
+        username:   row.childNodes[2].textContent,
+        email:      row.childNodes[3].textContent,
+        password:   row.childNodes[4].textContent,
     }
 }
 
@@ -47,8 +84,22 @@ function create() {
     newUser["E-mail"] = document.getElementById('email').value;
     newUser["Password"] = document.getElementById('password').value;
 
+    newUser["ID"] = users[users.length-1].ID + 1;
     users.push(newUser);
 
+    // var table = document.getElementById("usersTable");
+
+    // if(table){
+    //     var tablePage = document.getElementById("listContainer");
+    //     tablePage.removeChild(table);
+    // }
+
+    rebuildTable();
+    // list(users);
+    navigate('list');
+}
+
+function rebuildTable(){
     var table = document.getElementById("usersTable");
 
     if(table){
@@ -57,7 +108,6 @@ function create() {
     }
 
     list(users);
-    navigate('list');
 }
 
 function list(users) {
@@ -105,6 +155,7 @@ function list(users) {
         var editButton = document.createElement("button");
         editButton.className = "btn btn-default btn-xs";
         editButton.textContent = "Edit";
+        editButton.onclick = editUser;
 
         var deleteButton =document.createElement("button");
         deleteButton.className = "btn btn-danger btn-xs";

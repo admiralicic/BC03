@@ -244,6 +244,26 @@ function list(users) {
     table.className += "table table-stripped table-hover";
 
     tablePage.appendChild(table);
+    tablePage.appendChild(paginate(1, users));
+}
+
+function paginate(currentPage, users){
+    var nav = document.createElement("nav");
+    var ul = document.createElement("ul");
+    ul.className = "pagination";
+    
+    var pages = Math.ceil(users.length / 10);
+    for(var i = 1; i <= pages; i++){
+        var li = document.createElement("li");
+        var a = document.createElement("a");
+        a.href = "#";
+        a.textContent = i;
+        li.appendChild(a);
+        ul.appendChild(li);
+    }
+    
+    nav.appendChild(ul);
+    return nav;
 }
 
 navigate("list");

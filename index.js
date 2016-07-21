@@ -1,21 +1,22 @@
 
 var currentPage = 1;
 var pageSize = 5;
+var users = [];
 
-var users = [
+var seedUsers = [
     { ID: 1, "Full Name": "Admir Alicic", Username: "admiralicic", "E-mail": "admir.alicic@gmail.com", Password: "test" },
     { ID: 2, "Full Name": "Emir Alicic", Username: "emiralicic", "E-mail": "emir.alicic@gmail.com", Password: "test" },
     { ID: 3, "Full Name": "Haris Alicic", Username: "harisalicic", "E-mail": "haris.alicic@gmail.com", Password: "test" },
-    { ID: 4, "Full Name": "Haris Alicic", Username: "harisalicic", "E-mail": "haris.alicic@gmail.com", Password: "test" },
-    { ID: 5, "Full Name": "Haris Alicic", Username: "harisalicic", "E-mail": "haris.alicic@gmail.com", Password: "test" },
-    { ID: 6, "Full Name": "Haris Alicic", Username: "harisalicic", "E-mail": "haris.alicic@gmail.com", Password: "test" },
-    { ID: 7, "Full Name": "Haris Alicic", Username: "harisalicic", "E-mail": "haris.alicic@gmail.com", Password: "test" },
-    { ID: 8, "Full Name": "Haris Alicic", Username: "harisalicic", "E-mail": "haris.alicic@gmail.com", Password: "test" },
-    { ID: 9, "Full Name": "Haris Alicic", Username: "harisalicic", "E-mail": "haris.alicic@gmail.com", Password: "test" },
-    { ID: 10, "Full Name": "Haris Alicic", Username: "harisalicic", "E-mail": "haris.alicic@gmail.com", Password: "test" },
-    { ID: 11, "Full Name": "Haris Alicic", Username: "harisalicic", "E-mail": "haris.alicic@gmail.com", Password: "test" },
-    { ID: 12, "Full Name": "Haris Alicic", Username: "harisalicic", "E-mail": "haris.alicic@gmail.com", Password: "test" },
-    { ID: 13, "Full Name": "Haris Alicic", Username: "harisalicic", "E-mail": "haris.alicic@gmail.com", Password: "test" },
+    { ID: 4, "Full Name": "John Wayne", Username: "johnw", "E-mail": "johnw@gmail.com", Password: "test" },
+    { ID: 5, "Full Name": "John Malkovich", Username: "malkovich", "E-mail": "malkovich@gmail.com", Password: "test" },
+    { ID: 6, "Full Name": "Bruce Willis", Username: "willisb", "E-mail": "willisb@gmail.com", Password: "test" },
+    { ID: 7, "Full Name": "Scarlet Johansson", Username: "scarlet", "E-mail": "scarlet@gmail.com", Password: "test" },
+    { ID: 8, "Full Name": "Salma Hayek", Username: "salma", "E-mail": "salma@gmail.com", Password: "test" },
+    { ID: 9, "Full Name": "Brad Pitt", Username: "presto", "E-mail": "presto@gmail.com", Password: "test" },
+    { ID: 10, "Full Name": "Angelina Jolie", Username: "angie", "E-mail": "angie@gmail.com", Password: "test" },
+    { ID: 11, "Full Name": "Heather Graham", Username: "gheader", "E-mail": "gheader@gmail.com", Password: "test" },
+    { ID: 12, "Full Name": "Collin Powell", Username: "collinp", "E-mail": "collinp@gmail.com", Password: "test" },
+    { ID: 13, "Full Name": "Mike Oldfield", Username: "mikeo", "E-mail": "mikeo@gmail.com", Password: "test" },
 ];
 
 function navigate(state) {
@@ -29,14 +30,14 @@ function navigate(state) {
 
 function search(event) {
     if (event.keyCode === 13) {
-        var criteria = event.target.value;
+        var criteria = event.target.value.toLowerCase();
         var filteredUsers = users.filter(function (user) {
-            if (user["Full Name"].indexOf(criteria) > -1 || user.Username.indexOf(criteria) > -1) {
+            if (user["Full Name"].toLowerCase().indexOf(criteria) > -1 || user.Username.toLowerCase().indexOf(criteria) > -1) {
                 return user;
             }
         });
 
-        rebuildTable(filteredUsers);
+        rebuildTable(filteredUsers, 1);
     }
 }
 
@@ -63,9 +64,9 @@ function editUser(event) {
 function updateUser() {
     for (var i = 0; i < users.length; i++) {
         if (users[i].ID === parseInt(document.getElementById("userId").value)) {
-            users[i]["Full Name"] = document.getElementById("editFullName").value;
-            users[i]["Username"] = document.getElementById("editUsername").value;
-            users[i]["E-mail"] = document.getElementById("editEmail").value;
+            users[i]["Full Name"] = properCase(document.getElementById("editFullName").value);
+            users[i]["Username"] = document.getElementById("editUsername").value.toLowerCase();
+            users[i]["E-mail"] = document.getElementById("editEmail").value.toLowerCase();
             users[i]["Password"] = document.getElementById("editPassword").value;
 
             if (!validUser(users[i])) {
@@ -78,6 +79,7 @@ function updateUser() {
                 return;
             }
 
+            saveData(users);
             rebuildTable(users);
             break;
         }
@@ -97,7 +99,7 @@ function deleteUser(event) {
 
                 var tbody = document.getElementsByTagName("tbody")[0];
                 tbody.removeChild(row);
-
+                saveData(users);
                 break;
             }
         }
@@ -146,11 +148,21 @@ function hideError() {
     var alertBox = document.getElementById("userAlert");
     alertBox.className = "alert alert-danger hide";
 }
+
+function properCase(str){
+    words = str.split(" ");
+    for (var i = 0; i < words.length; i++){
+        words[i] = words[i].charAt(0).toUpperCase() + words[i].substring(1).toLowerCase();
+    }
+
+    return words.join(" ");
+}
+
 function create() {
     var newUser = {};
-    newUser["Full Name"] = document.getElementById('fullName').value;
-    newUser["Username"] = document.getElementById('username').value;
-    newUser["E-mail"] = document.getElementById('email').value;
+    newUser["Full Name"] = properCase(document.getElementById('fullName').value);
+    newUser["Username"] = document.getElementById('username').value.toLowerCase();
+    newUser["E-mail"] = document.getElementById('email').value.toLowerCase();
     newUser["Password"] = document.getElementById('password').value;
 
     var alertBox = document.getElementById("createUserAlert");
@@ -168,6 +180,7 @@ function create() {
     newUser["ID"] = users[users.length - 1].ID + 1;
     users.push(newUser);
 
+    saveData(users);
     rebuildTable(users);
     navigate('list');
 }
@@ -280,7 +293,26 @@ function goToPage(event){
     rebuildTable(users);
 }
 
+function saveData(data){
+    window.localStorage.setItem("users", JSON.stringify(data));
+}
+
+function getData(){
+    data = window.localStorage.getItem("users");
+    return JSON.parse(data);
+}
+
+function seed(){
+    if(!getData()){
+        saveData(seedUsers);
+    }
+}
+
+seed();
+users = getData();
+
 navigate("list");
+
 list(users, currentPage);
 
 

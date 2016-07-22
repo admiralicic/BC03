@@ -36,8 +36,8 @@ function search(event) {
                 return user;
             }
         });
-
-        rebuildTable(filteredUsers, 1);
+        currentPage = 1;
+        rebuildTable(filteredUsers);
     }
 }
 
